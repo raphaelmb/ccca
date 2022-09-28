@@ -57,3 +57,15 @@ incorporar informações de tratamento
 - "classe grande"
 
 - quebrando o OCP (Open/Closed Principle)
+
+- inveja de dados
+
+mover métodos
+ocultar delegações
+
+- longa lista de parâmetros
+
+quanto menos parâmetros melhor
+
+introduzir abstrações
+introduzir objetos parâmetro
