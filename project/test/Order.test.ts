@@ -1,4 +1,5 @@
 import Coupon from "../src/Coupon";
+import Dimension from "../src/Dimension";
 import Item from "../src/Item";
 import Order from "../src/Order";
 
@@ -15,7 +16,7 @@ test("Should create an order with 3 items (with description, price and quantity)
   expect(total).toBe(6090);
 });
 
-test("Should create an order with a discount coupon (percentage over order total)", () => {
+test("Should create an order with a discount coupon", () => {
   const order = new Order("935.411.347-80");
   order.addItem(new Item(1, "Guitar", 1000), 1);
   order.addItem(new Item(2, "Amplifier", 5000), 1);
@@ -23,4 +24,28 @@ test("Should create an order with a discount coupon (percentage over order total
   order.addCoupon(new Coupon("VALE20", 20));
   const total = order.getTotal();
   expect(total).toBe(4872);
+});
+
+test("Should create an order with an expired discount coupon", () => {
+  const order = new Order("935.411.347-80", new Date("2021-03-10T10:00:00"));
+  order.addItem(new Item(1, "Guitar", 1000), 1);
+  order.addItem(new Item(2, "Amplifier", 5000), 1);
+  order.addItem(new Item(3, "Cable", 30), 3);
+  order.addCoupon(new Coupon("VALE20", 20, new Date("2021-03-01T10:00:00")));
+  const total = order.getTotal();
+  expect(total).toBe(6090);
+});
+
+test("Should create an order with 3 items and calculate freight", () => {
+  const order = new Order("935.411.347-80");
+  order.addItem(new Item(1, "Guitar", 1000, new Dimension(100, 30, 10), 3), 1);
+  order.addItem(
+    new Item(2, "Amplifier", 5000, new Dimension(50, 50, 50), 20),
+    1
+  );
+  order.addItem(new Item(3, "Cable", 30, new Dimension(10, 10, 10), 1), 3);
+  const freight = order.getFreight();
+  const total = order.getTotal();
+  expect(freight).toBe(260);
+  expect(total).toBe(6350);
 });
