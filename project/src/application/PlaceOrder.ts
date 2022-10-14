@@ -1,5 +1,5 @@
-import ItemRepository from "./ItemRepository";
-import Order from "./Order";
+import ItemRepository from "../domain/repository/ItemRepository";
+import Order from "../domain/entity/Order";
 import OrderRepository from "./OrderRepository";
 
 export default class PlaceOrder {

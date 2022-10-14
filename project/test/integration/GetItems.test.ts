@@ -1,7 +1,7 @@
-import Dimension from "../src/Dimension";
-import GetItems from "../src/GetItems";
-import Item from "../src/Item";
-import ItemRepositoryMemory from "../src/ItemRepositoryMemory";
+import GetItems from "../src/application/GetItems";
+import Dimension from "../src/domain/entity/Dimension";
+import Item from "../src/domain/entity/Item";
+import ItemRepositoryMemory from "../src/infra/repository/memory/ItemRepositoryMemory";
 
 test("Should get items", async () => {
   const itemRepository = new ItemRepositoryMemory();

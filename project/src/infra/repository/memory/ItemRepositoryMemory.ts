@@ -1,5 +1,5 @@
 import Item from "./Item";
-import ItemRepository from "./ItemRepository";
+import ItemRepository from "../../../domain/repository/ItemRepository";
 
 export default class ItemRepositoryMemory implements ItemRepository {
   items: Item[];
