@@ -1,4 +1,4 @@
-import Coupon from "../src/domain/entity/Coupon";
+import Coupon from "../../src/domain/entity/Coupon";
 
 test("Should create a coupon", () => {
   const coupon = new Coupon("VALE20", 20);

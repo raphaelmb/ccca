@@ -1,6 +1,6 @@
-import Dimension from "../src/domain/entity/Dimension";
-import Freight from "../src/domain/entity/Freight";
-import Item from "../src/domain/entity/Item";
+import Dimension from "../../src/domain/entity/Dimension";
+import Freight from "../../src/domain/entity/Freight";
+import Item from "../../src/domain/entity/Item";
 
 test("Should calculate freight", () => {
   const freight = new Freight();

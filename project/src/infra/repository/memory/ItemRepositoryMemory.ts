@@ -1,4 +1,4 @@
-import Item from "./Item";
+import Item from "../../../domain/entity/Item";
 import ItemRepository from "../../../domain/repository/ItemRepository";
 
 export default class ItemRepositoryMemory implements ItemRepository {
