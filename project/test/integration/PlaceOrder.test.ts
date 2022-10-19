@@ -2,22 +2,25 @@ import PlaceOrder from "../../src/application/PlaceOrder";
 import Coupon from "../../src/domain/entity/Coupon";
 import Dimension from "../../src/domain/entity/Dimension";
 import Item from "../../src/domain/entity/Item";
+import PgPromiseConnectionAdapter from "../../src/infra/database/PgPromiseConnectionAdapter";
+import OrderRepositoryDatabase from "../../src/infra/repository/database/OrderRepositoryDatabase";
 import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory";
 import ItemRepositoryMemory from "../../src/infra/repository/memory/ItemRepositoryMemory";
 import OrderRepositoryMemory from "../../src/infra/repository/memory/OrderRepositoryMemory";
 
-test("Should place an order", async () => {
+test.skip("Should place an order", async () => {
   const itemRepository = new ItemRepositoryMemory();
-  const orderRepository = new OrderRepositoryMemory();
+  const connection = new PgPromiseConnectionAdapter();
+  const orderRepository = new OrderRepositoryDatabase(connection);
   const couponRepository = new CouponRepositoryMemory();
   const spy = jest.spyOn(orderRepository, "save");
   itemRepository.save(
-    new Item(1, "Guitar", 1000, new Dimension(100, 30, 10), 3)
+    new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10), 3)
   );
   itemRepository.save(
-    new Item(2, "Amplifier", 5000, new Dimension(50, 50, 50), 20)
+    new Item(2, "Amplificador", 5000, new Dimension(50, 50, 50), 20)
   );
-  itemRepository.save(new Item(3, "Cable", 30, new Dimension(10, 10, 10), 1));
+  itemRepository.save(new Item(3, "Cabo", 30, new Dimension(10, 10, 10), 1));
   const placeOrder = new PlaceOrder(
     itemRepository,
     orderRepository,
@@ -34,6 +37,7 @@ test("Should place an order", async () => {
   const output = await placeOrder.execute(input);
   expect(spy).toBeCalledTimes(1);
   expect(output.total).toBe(6350);
+  await connection.close();
 });
 
 test("Should place an order and generate order's code", async () => {
@@ -42,12 +46,12 @@ test("Should place an order and generate order's code", async () => {
   const couponRepository = new CouponRepositoryMemory();
   const spy = jest.spyOn(orderRepository, "save");
   itemRepository.save(
-    new Item(1, "Guitar", 1000, new Dimension(100, 30, 10), 3)
+    new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10), 3)
   );
   itemRepository.save(
-    new Item(2, "Amplifier", 5000, new Dimension(50, 50, 50), 20)
+    new Item(2, "Amplificador", 5000, new Dimension(50, 50, 50), 20)
   );
-  itemRepository.save(new Item(3, "Cable", 30, new Dimension(10, 10, 10), 1));
+  itemRepository.save(new Item(3, "Cabo", 30, new Dimension(10, 10, 10), 1));
   const placeOrder = new PlaceOrder(
     itemRepository,
     orderRepository,
@@ -73,12 +77,12 @@ test("Should place an order with discount", async () => {
   const couponRepository = new CouponRepositoryMemory();
   const spy = jest.spyOn(orderRepository, "save");
   itemRepository.save(
-    new Item(1, "Guitar", 1000, new Dimension(100, 30, 10), 3)
+    new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10), 3)
   );
   itemRepository.save(
-    new Item(2, "Amplifier", 5000, new Dimension(50, 50, 50), 20)
+    new Item(2, "Amplificador", 5000, new Dimension(50, 50, 50), 20)
   );
-  itemRepository.save(new Item(3, "Cable", 30, new Dimension(10, 10, 10), 1));
+  itemRepository.save(new Item(3, "Cabo", 30, new Dimension(10, 10, 10), 1));
   couponRepository.save(new Coupon("VALE20", 20));
   const placeOrder = new PlaceOrder(
     itemRepository,

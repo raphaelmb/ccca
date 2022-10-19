@@ -6,4 +6,5 @@ test("Should return items from database", async () => {
   const itemRepository = new ItemRepositoryDatabase(connection);
   const items = await itemRepository.list();
   expect(items).toHaveLength(3);
+  await connection.close();
 });

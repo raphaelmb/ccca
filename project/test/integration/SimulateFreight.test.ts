@@ -7,12 +7,12 @@ test("Should simulate an order's freight", async () => {
   const itemRepository = new ItemRepositoryMemory();
   const simulateFreight = new SimulateFreight(itemRepository);
   itemRepository.save(
-    new Item(1, "Guitar", 1000, new Dimension(100, 30, 10), 3)
+    new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10), 3)
   );
   itemRepository.save(
-    new Item(2, "Amplifier", 5000, new Dimension(50, 50, 50), 20)
+    new Item(2, "Amplificador", 5000, new Dimension(50, 50, 50), 20)
   );
-  itemRepository.save(new Item(3, "Cable", 30, new Dimension(10, 10, 10), 1));
+  itemRepository.save(new Item(3, "Cabo", 30, new Dimension(10, 10, 10), 1));
   const input = {
     orderItems: [
       { idItem: 1, quantity: 1 },

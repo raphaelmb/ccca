@@ -14,7 +14,10 @@ export default class ItemRepositoryDatabase implements ItemRepository {
   }
 
   async list(): Promise<Item[]> {
-    const itemsData = await this.connection.query("select * from item", []);
+    const itemsData = await this.connection.query(
+      "select * from ccca.item",
+      []
+    );
     const items: Item[] = [];
     for (const itemData of itemsData) {
       items.push(
