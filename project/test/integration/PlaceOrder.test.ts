@@ -2,16 +2,24 @@ import PlaceOrder from "../../src/application/PlaceOrder";
 import Coupon from "../../src/domain/entity/Coupon";
 import Dimension from "../../src/domain/entity/Dimension";
 import Item from "../../src/domain/entity/Item";
+import OrderRepository from "../../src/domain/repository/OrderRepository";
+import Connection from "../../src/infra/database/Connection";
 import PgPromiseConnectionAdapter from "../../src/infra/database/PgPromiseConnectionAdapter";
 import OrderRepositoryDatabase from "../../src/infra/repository/database/OrderRepositoryDatabase";
 import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory";
 import ItemRepositoryMemory from "../../src/infra/repository/memory/ItemRepositoryMemory";
-import OrderRepositoryMemory from "../../src/infra/repository/memory/OrderRepositoryMemory";
 
-test.skip("Should place an order", async () => {
+let connection: Connection;
+let orderRepository: OrderRepository;
+
+beforeEach(async () => {
+  connection = new PgPromiseConnectionAdapter();
+  orderRepository = new OrderRepositoryDatabase(connection);
+  await orderRepository.clear();
+});
+
+test("Should place an order", async () => {
   const itemRepository = new ItemRepositoryMemory();
-  const connection = new PgPromiseConnectionAdapter();
-  const orderRepository = new OrderRepositoryDatabase(connection);
   const couponRepository = new CouponRepositoryMemory();
   const spy = jest.spyOn(orderRepository, "save");
   itemRepository.save(
@@ -37,12 +45,10 @@ test.skip("Should place an order", async () => {
   const output = await placeOrder.execute(input);
   expect(spy).toBeCalledTimes(1);
   expect(output.total).toBe(6350);
-  await connection.close();
 });
 
 test("Should place an order and generate order's code", async () => {
   const itemRepository = new ItemRepositoryMemory();
-  const orderRepository = new OrderRepositoryMemory();
   const couponRepository = new CouponRepositoryMemory();
   const spy = jest.spyOn(orderRepository, "save");
   itemRepository.save(
@@ -73,7 +79,6 @@ test("Should place an order and generate order's code", async () => {
 
 test("Should place an order with discount", async () => {
   const itemRepository = new ItemRepositoryMemory();
-  const orderRepository = new OrderRepositoryMemory();
   const couponRepository = new CouponRepositoryMemory();
   const spy = jest.spyOn(orderRepository, "save");
   itemRepository.save(
@@ -83,7 +88,9 @@ test("Should place an order with discount", async () => {
     new Item(2, "Amplificador", 5000, new Dimension(50, 50, 50), 20)
   );
   itemRepository.save(new Item(3, "Cabo", 30, new Dimension(10, 10, 10), 1));
-  couponRepository.save(new Coupon("VALE20", 20));
+  couponRepository.save(
+    new Coupon("VALE20", 20, new Date("2021-03-10T10:00:00"))
+  );
   const placeOrder = new PlaceOrder(
     itemRepository,
     orderRepository,
@@ -97,8 +104,13 @@ test("Should place an order with discount", async () => {
       { idItem: 3, quantity: 3 },
     ],
     coupon: "VALE20",
+    date: new Date("2021-03-01T10:00:00"),
   };
   const output = await placeOrder.execute(input);
   expect(spy).toBeCalledTimes(1);
   expect(output.total).toBe(5132);
+});
+
+afterEach(async () => {
+  await connection.close();
 });
