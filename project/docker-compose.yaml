@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  database:
+    container_name: ccca-postgres
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - "ccca_postgres:/var/lib/postgresql/data"
+
+volumes:
+  ccca_postgres:
+    driver: local
