@@ -21,8 +21,16 @@ app.post("/checkout", async (req, res) => {
       message: "Invalid cpf",
     });
   }
+  let freight = 0;
   let total = 0;
+  const productsIds: number[] = [];
   for (const item of req.body.items) {
+    if (productsIds.some((idProduct) => idProduct === item.idProduct)) {
+      return res.status(422).json({
+        message: "Duplicated product",
+      });
+    }
+    productsIds.push(item.idProduct);
     // const product = products.find(
     //   (product) => product.idProduct === item.idProduct
     // );
@@ -31,7 +39,17 @@ app.post("/checkout", async (req, res) => {
       [item.idProduct]
     );
     if (product) {
+      if (item.quantity <= 0) {
+        return res.status(422).json({
+          message: "Quantity must be positive",
+        });
+      }
       total += parseFloat(product.price) * item.quantity;
+      const volume =
+        (product.width / 100) * (product.height / 100) * (product.length / 100);
+      const density = parseFloat(product.weight) / volume;
+      const itemFreight = 1000 * volume * (density / 100);
+      freight += itemFreight >= 10 ? itemFreight : 10;
     } else {
       return res.status(422).json({
         message: "Product not found",
@@ -44,11 +62,12 @@ app.post("/checkout", async (req, res) => {
       "select * from ccat9.coupon where code = $1",
       [req.body.coupon]
     );
-    if (coupon) {
-      console.log(coupon);
+    const today = new Date();
+    if (coupon && coupon.expire_date.getTime() > today.getTime()) {
       total -= (total * coupon.percentage) / 100;
     }
   }
+  total += freight;
   return res.json({ total });
 });
 app.listen(3000);

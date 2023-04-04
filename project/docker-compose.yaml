@@ -12,6 +12,19 @@ services:
     volumes:
       - "ccca_postgres:/var/lib/postgresql/data"
 
+  rabbitmq:
+    image: rabbitmq:3.8.16-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=/
+
 volumes:
   ccca_postgres:
     driver: local
