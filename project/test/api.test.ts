@@ -30,7 +30,7 @@ test("should place an order with 3 items", async () => {
 test("should not place an order with non existing item", async () => {
   const input = {
     cpf: "987.654.321-00",
-    items: [{ idProduct: 4, quantity: 1 }],
+    items: [{ idProduct: 5, quantity: 1 }],
   };
   const response = await axios.post("http://localhost:3000/checkout", input);
   const output = response.data;
