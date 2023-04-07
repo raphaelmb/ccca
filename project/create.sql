@@ -1,3 +1,5 @@
+drop table ccat9.item;
+drop table ccat9.order;
 drop table ccat9.product;
 drop table ccat9.coupon;
 drop schema ccat9;
@@ -29,3 +31,24 @@ create table ccat9.coupon (
 );
 
 insert into ccat9.coupon (code, percentage, expire_date) values ('VALE20', 20, '2023-12-01T10:00:00'), ('VALE20_EXPIRED', 20, '2022-10-01T10:00:00');
+
+create table ccat9.order (
+  id_order serial primary key,
+  coupon_code text,
+  coupon_percentage numeric,
+  code text,
+  cpf text,
+  email text,
+  issue_date timestamp,
+  freight numeric,
+  total numeric,
+  sequence integer
+);
+
+create table ccat9.item (
+  id_order integer references ccat9.order (id_order),
+  id_product integer references ccat9.product (id_product),
+  price numeric,
+  quantity integer,
+  primary key (id_order, id_product)
+);
