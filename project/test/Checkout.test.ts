@@ -363,11 +363,11 @@ test("should place an order with 3 items with order code", async () => {
     async save(order: any): Promise<void> {},
     async getByCpf(cpf: string): Promise<any> {},
     async count(): Promise<number> {
-      return 1;
+      return 0;
     },
   };
   const checkout = new Checkout(productData, couponData, orderData);
   const output = await checkout.execute(input);
   console.log(output);
-  expect(output.code).toBe("202300000002");
+  expect(output.code).toBe("202300000001");
 });
