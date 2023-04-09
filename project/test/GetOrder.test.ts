@@ -1,14 +1,16 @@
 import { expect, test } from "vitest";
-import Checkout from "../src/Checkout";
-import ProductDataDatabase from "../src/ProductDataDatabase";
-import CouponDataDatabase from "../src/CouponDataDatabase";
-import GetOrderByCpf from "../src/GetOrderByCpf";
-import OrderDataDatabase from "../src/OrderDataDatabase";
+import Checkout from "../src/application/Checkout";
+import CouponDataDatabase from "../src/infra/data/CouponDataDatabase";
+import GetOrderByCpf from "../src/application/GetOrderByCpf";
+import PgPromiseConnection from "../src/infra/database/PgPromiseConnection";
+import OrderDataDatabase from "../src/infra/data/OrderDataDatabase";
+import ProductDataDatabase from "../src/infra/data/ProductDataDatabase";
 
 test("should check an order", async () => {
-  const productData = new ProductDataDatabase();
-  const couponData = new CouponDataDatabase();
-  const orderData = new OrderDataDatabase();
+  const connection = new PgPromiseConnection();
+  const productData = new ProductDataDatabase(connection);
+  const couponData = new CouponDataDatabase(connection);
+  const orderData = new OrderDataDatabase(connection);
   const checkout = new Checkout(productData, couponData, orderData);
   const input = {
     cpf: "987.654.321-00",
@@ -22,4 +24,5 @@ test("should check an order", async () => {
   const getOrderByCpf = new GetOrderByCpf(orderData);
   const output = await getOrderByCpf.execute("987.654.321-00");
   expect(output.total).toBe(6350);
+  await connection.close();
 });

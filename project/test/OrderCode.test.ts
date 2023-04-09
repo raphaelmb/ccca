@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import OrderCode from "../src/OrderCode";
+import OrderCode from "../src/domain/entities/OrderCode";
 
 test("should create a code for the order", () => {
   const orderCode = new OrderCode(new Date("2023-04-08T10:00:00"), 1);

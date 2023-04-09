@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "start": "tsx watch src/api.ts"
+    "start": "tsx watch src/main_api.ts"
   },
   "keywords": [],
   "author": "",

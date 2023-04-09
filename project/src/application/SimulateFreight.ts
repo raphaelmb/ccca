@@ -1,5 +1,5 @@
-import FreightCalculator from "./FreightCalculator";
-import ProductData from "./ProductData";
+import FreightCalculator from "../domain/entities/FreightCalculator";
+import ProductData from "../ProductData";
 
 export default class SimulateFreight {
   constructor(readonly productData: ProductData) {}
@@ -8,11 +8,7 @@ export default class SimulateFreight {
     let total = 0;
     for (const item of input.items) {
       const product = await this.productData.getProduct(item.idProduct);
-      if (product) {
-        total += FreightCalculator.calculate(product);
-      } else {
-        throw new Error("Product not found");
-      }
+      total += FreightCalculator.calculate(product);
     }
     return {
       total,

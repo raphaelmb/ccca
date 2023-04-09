@@ -1,3 +1,5 @@
+import Currencies from "./Currencies";
+
 export default class Product {
   constructor(
     readonly idProduct: number,
@@ -6,6 +8,7 @@ export default class Product {
     readonly width: number,
     readonly height: number,
     readonly length: number,
-    readonly weight: number
+    readonly weight: number,
+    readonly currency: string = "BRL"
   ) {}
 }
