@@ -1,12 +1,13 @@
 import { test, expect, vi } from "vitest";
 import Checkout from "../src/application/Checkout";
-import CouponData from "../src/domain/data/CouponData";
 import CurrencyGatewayRandom from "../src/infra/gateway/CurrencyGatewayRandom";
 import MailerConsole from "../src/infra/mailer/MailerConsole";
 import CurrencyGateway from "../src/infra/gateway/CurrencyGateway";
 import Currencies from "../src/domain/entities/Currencies";
 import ProductData from "../src/domain/data/ProductData";
 import OrderData from "../src/domain/data/OrderData";
+import Product from "../src/domain/entities/Product";
+import CouponData from "../src/domain/data/CouponData";
 
 test("should place an order with 3 items", async () => {
   const input = {
@@ -20,41 +21,17 @@ test("should place an order with 3 items", async () => {
   // const productData = new ProductDataDatabase();
   // const couponData = new CouponDataDatabase();
   const productData: ProductData = {
-    getProduct: function (idProduct: number): Promise<any> {
-      const products: { [idProduct: number]: any } = {
-        1: {
-          idProduct: 1,
-          description: "A",
-          price: 1000,
-          width: 100,
-          height: 30,
-          length: 10,
-          weight: 3,
-        },
-        2: {
-          idProduct: 2,
-          description: "B",
-          price: 5000,
-          width: 50,
-          height: 50,
-          length: 50,
-          weight: 22,
-        },
-        3: {
-          idProduct: 3,
-          description: "C",
-          price: 30,
-          width: 10,
-          height: 10,
-          length: 10,
-          weight: 0.9,
-        },
+    async getProduct(idProduct: number): Promise<Product> {
+      const products: { [idProduct: number]: Product } = {
+        1: new Product(1, "A", 1000, 100, 30, 10, 3, "BRL"),
+        2: new Product(2, "B", 5000, 50, 50, 50, 22, "BRL"),
+        3: new Product(3, "C", 30, 10, 10, 10, 0.9, "BRL"),
       };
       return products[idProduct];
     },
   };
   const couponData: CouponData = {
-    getCoupon: function (code: string): Promise<any> {
+    async getCoupon(code: string): Promise<any> {
       const coupons: any = {
         VALE20: {
           code: "VALE20",
@@ -105,46 +82,10 @@ test("should place an order with 4 items with different currencies", async () =>
   const productData: ProductData = {
     getProduct: function (idProduct: number): Promise<any> {
       const products: { [idProduct: number]: any } = {
-        1: {
-          idProduct: 1,
-          description: "A",
-          price: 1000,
-          width: 100,
-          height: 30,
-          length: 10,
-          weight: 3,
-          currency: "BRL",
-        },
-        2: {
-          idProduct: 2,
-          description: "B",
-          price: 5000,
-          width: 50,
-          height: 50,
-          length: 50,
-          weight: 22,
-          currency: "BRL",
-        },
-        3: {
-          idProduct: 3,
-          description: "C",
-          price: 30,
-          width: 10,
-          height: 10,
-          length: 10,
-          weight: 0.9,
-          currency: "BRL",
-        },
-        4: {
-          idProduct: 4,
-          description: "D",
-          price: 100,
-          width: 100,
-          height: 30,
-          length: 10,
-          weight: 3,
-          currency: "USD",
-        },
+        1: new Product(1, "A", 1000, 100, 30, 10, 3, "BRL"),
+        2: new Product(2, "B", 5000, 50, 50, 50, 22, "BRL"),
+        3: new Product(3, "C", 30, 10, 10, 10, 0.9, "BRL"),
+        4: new Product(4, "D", 100, 100, 30, 10, 3, "USD"),
       };
       return products[idProduct];
     },
@@ -155,7 +96,7 @@ test("should place an order with 4 items with different currencies", async () =>
         VALE20: {
           code: "VALE20",
           percentage: 20,
-          expire_date: new Date("2022-12-01T10:00:00"),
+          expire_date: new Date("2023-04-01T10:00:00"),
         },
         VALE20_EXPIRED: {
           code: "VALE20_EXPIRED",
@@ -201,59 +142,23 @@ test("should place an order with 4 items with different currencies with fake", a
   // const productData = new ProductDataDatabase();
   // const couponData = new CouponDataDatabase();
   const productData: ProductData = {
-    getProduct: function (idProduct: number): Promise<any> {
-      const products: { [idProduct: number]: any } = {
-        1: {
-          idProduct: 1,
-          description: "A",
-          price: 1000,
-          width: 100,
-          height: 30,
-          length: 10,
-          weight: 3,
-          currency: "BRL",
-        },
-        2: {
-          idProduct: 2,
-          description: "B",
-          price: 5000,
-          width: 50,
-          height: 50,
-          length: 50,
-          weight: 22,
-          currency: "BRL",
-        },
-        3: {
-          idProduct: 3,
-          description: "C",
-          price: 30,
-          width: 10,
-          height: 10,
-          length: 10,
-          weight: 0.9,
-          currency: "BRL",
-        },
-        4: {
-          idProduct: 4,
-          description: "D",
-          price: 100,
-          width: 100,
-          height: 30,
-          length: 10,
-          weight: 3,
-          currency: "USD",
-        },
+    async getProduct(idProduct: number): Promise<Product> {
+      const products: { [idProduct: number]: Product } = {
+        1: new Product(1, "A", 1000, 100, 30, 10, 3, "BRL"),
+        2: new Product(2, "B", 5000, 50, 50, 50, 22, "BRL"),
+        3: new Product(3, "C", 30, 10, 10, 10, 0.9, "BRL"),
+        4: new Product(4, "D", 100, 100, 30, 10, 3, "USD"),
       };
       return products[idProduct];
     },
   };
-  const couponData: CouponData = {
-    getCoupon: function (code: string): Promise<any> {
+  const coupondata: CouponData = {
+    async getCoupon(code: string): Promise<any> {
       const coupons: any = {
         VALE20: {
           code: "VALE20",
           percentage: 20,
-          expire_date: new Date("2022-12-01T10:00:00"),
+          expire_date: new Date("2023-04-15T10:00:00"),
         },
         VALE20_EXPIRED: {
           code: "VALE20_EXPIRED",
@@ -264,7 +169,7 @@ test("should place an order with 4 items with different currencies with fake", a
       return coupons[code];
     },
   };
-  const currencyGateway: CurrencyGateway = {
+  const currencygateway: CurrencyGateway = {
     async getCurrencies(): Promise<Currencies> {
       const currencies = new Currencies();
       currencies.addCurrency("USD", 2);
@@ -272,7 +177,7 @@ test("should place an order with 4 items with different currencies with fake", a
       return currencies;
     },
   };
-  const orderData: OrderData = {
+  const orderdata: OrderData = {
     async save(order: any): Promise<void> {},
     async getByCpf(cpf: string): Promise<any> {},
     async count(): Promise<number> {
@@ -281,19 +186,19 @@ test("should place an order with 4 items with different currencies with fake", a
   };
   const checkout = new Checkout(
     productData,
-    couponData,
-    orderData,
-    currencyGateway
+    coupondata,
+    orderdata,
+    currencygateway
   );
   const output = await checkout.execute(input);
   expect(output.total).toBe(6580);
-  // expect(mailerSpy).toHaveBeenCalledTimes(1);
-  // expect(mailerSpy).toBeCalledWith(
+  // expect(mailerspy).tohavebeencalledtimes(1);
+  // expect(mailerspy).tobecalledwith(
   //   "test@email.com",
-  //   "Checkout Success",
-  //   "ABCDEF"
+  //   "checkout success",
+  //   "abcdef"
   // );
-  // mailerSpy.mockRestore();
+  // mailerspy.mockrestore();
 });
 
 test("should place an order with 3 items with order code", async () => {
@@ -305,44 +210,20 @@ test("should place an order with 3 items with order code", async () => {
       { idProduct: 3, quantity: 3 },
     ],
   };
-  // const productData = new ProductDataDatabase();
-  // const couponData = new CouponDataDatabase();
-  const productData: ProductData = {
-    getProduct: function (idProduct: number): Promise<any> {
+  // const productdata = new productdatadatabase();
+  // const coupondata = new coupondatadatabase();
+  const productdata: ProductData = {
+    async getProduct(idProduct: number): Promise<any> {
       const products: { [idProduct: number]: any } = {
-        1: {
-          idProduct: 1,
-          description: "A",
-          price: 1000,
-          width: 100,
-          height: 30,
-          length: 10,
-          weight: 3,
-        },
-        2: {
-          idProduct: 2,
-          description: "B",
-          price: 5000,
-          width: 50,
-          height: 50,
-          length: 50,
-          weight: 22,
-        },
-        3: {
-          idProduct: 3,
-          description: "C",
-          price: 30,
-          width: 10,
-          height: 10,
-          length: 10,
-          weight: 0.9,
-        },
+        1: new Product(1, "A", 1000, 100, 30, 10, 3, "BRL"),
+        2: new Product(2, "B", 5000, 50, 50, 50, 22, "BRL"),
+        3: new Product(3, "C", 30, 10, 10, 10, 0.9, "BRL"),
       };
       return products[idProduct];
     },
   };
-  const couponData: CouponData = {
-    getCoupon: function (code: string): Promise<any> {
+  const coupondata: CouponData = {
+    async getCoupon(code: string): Promise<any> {
       const coupons: any = {
         VALE20: {
           code: "VALE20",
@@ -358,14 +239,14 @@ test("should place an order with 3 items with order code", async () => {
       return coupons[code];
     },
   };
-  const orderData: OrderData = {
+  const orderdata: OrderData = {
     async save(order: any): Promise<void> {},
     async getByCpf(cpf: string): Promise<any> {},
     async count(): Promise<number> {
       return 0;
     },
   };
-  const checkout = new Checkout(productData, couponData, orderData);
+  const checkout = new Checkout(productdata, coupondata, orderdata);
   const output = await checkout.execute(input);
   expect(output.code).toBe("202300000001");
 });

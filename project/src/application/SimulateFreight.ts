@@ -1,5 +1,5 @@
+import ProductData from "../domain/data/ProductData";
 import FreightCalculator from "../domain/entities/FreightCalculator";
-import ProductData from "../ProductData";
 
 export default class SimulateFreight {
   constructor(readonly productData: ProductData) {}
