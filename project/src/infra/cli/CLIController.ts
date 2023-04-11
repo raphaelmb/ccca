@@ -23,7 +23,7 @@ export default class CLIController {
 
     handler.on("checkout", async (params: string) => {
       const output = await checkOut.execute(input);
-      // console.log(output);
+      handler.write(JSON.stringify(output));
     });
   }
 }
