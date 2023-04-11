@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
-import SimulateFreight from "../src/application/SimulateFreight";
-import PgPromiseConnection from "../src/infra/database/PgPromiseConnection";
-import ProductDataDatabase from "../src/infra/data/ProductDataDatabase";
+import SimulateFreight from "../../src/application/SimulateFreight";
+import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
+import ProductDataDatabase from "../../src/infra/data/ProductDataDatabase";
 
 test("should simulate the freight of an order", async () => {
   const connection = new PgPromiseConnection();

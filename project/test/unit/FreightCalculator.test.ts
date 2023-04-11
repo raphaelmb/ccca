@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import FreightCalculator from "../src/domain/entities/FreightCalculator";
-import Product from "../src/domain/entities/Product";
+import FreightCalculator from "../../src/domain/entities/FreightCalculator";
+import Product from "../../src/domain/entities/Product";
 
 test("should calculate freight", () => {
   const product = new Product(1, "A", 1000, 100, 30, 10, 3);

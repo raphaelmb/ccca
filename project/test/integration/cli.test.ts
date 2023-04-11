@@ -1,11 +1,11 @@
 import { expect, test, vi } from "vitest";
-import PgPromiseConnection from "../src/infra/database/PgPromiseConnection";
-import ProductDataDatabase from "../src/infra/data/ProductDataDatabase";
-import CouponDataDatabase from "../src/infra/data/CouponDataDatabase";
-import OrderDataDatabase from "../src/infra/data/OrderDataDatabase";
-import Checkout from "../src/application/Checkout";
-import CLIController from "../src/infra/cli/CLIController";
-import CLIHandlerMemory from "../src/infra/cli/CLIHandlerMemory";
+import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
+import ProductDataDatabase from "../../src/infra/data/ProductDataDatabase";
+import CouponDataDatabase from "../../src/infra/data/CouponDataDatabase";
+import OrderDataDatabase from "../../src/infra/data/OrderDataDatabase";
+import Checkout from "../../src/application/Checkout";
+import CLIController from "../../src/infra/cli/CLIController";
+import CLIHandlerMemory from "../../src/infra/cli/CLIHandlerMemory";
 
 test("should test cli", async () => {
   const connection = new PgPromiseConnection();

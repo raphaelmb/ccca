@@ -1,4 +1,4 @@
-import { validate } from "../src/domain/entities/CpfValidator";
+import { validate } from "../../src/domain/entities/CpfValidator";
 import { test, expect } from "vitest";
 
 const validCpfs = [

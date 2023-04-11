@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
-import Order from "../src/domain/entities/Order";
-import Product from "../src/domain/entities/Product";
-import Coupon from "../src/domain/entities/Coupon";
+import Order from "../../src/domain/entities/Order";
+import Product from "../../src/domain/entities/Product";
+import Coupon from "../../src/domain/entities/Coupon";
 
 test("should create an empty order with a valid CPF", () => {
   const order = new Order("987-654-321-00");

@@ -1,13 +1,13 @@
 import { test, expect, vi } from "vitest";
-import Checkout from "../src/application/Checkout";
-import CurrencyGatewayRandom from "../src/infra/gateway/CurrencyGatewayRandom";
-import MailerConsole from "../src/infra/mailer/MailerConsole";
-import CurrencyGateway from "../src/infra/gateway/CurrencyGateway";
-import Currencies from "../src/domain/entities/Currencies";
-import ProductData from "../src/domain/data/ProductData";
-import OrderData from "../src/domain/data/OrderData";
-import Product from "../src/domain/entities/Product";
-import CouponData from "../src/domain/data/CouponData";
+import Checkout from "../../src/application/Checkout";
+import CurrencyGatewayRandom from "../../src/infra/gateway/CurrencyGatewayRandom";
+import MailerConsole from "../../src/infra/mailer/MailerConsole";
+import CurrencyGateway from "../../src/infra/gateway/CurrencyGateway";
+import Currencies from "../../src/domain/entities/Currencies";
+import ProductData from "../../src/domain/data/ProductData";
+import OrderData from "../../src/domain/data/OrderData";
+import Product from "../../src/domain/entities/Product";
+import CouponData from "../../src/domain/data/CouponData";
 
 test("should place an order with 3 items", async () => {
   const input = {

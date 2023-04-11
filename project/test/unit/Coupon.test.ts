@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import Coupon from "../src/domain/entities/Coupon";
+import Coupon from "../../src/domain/entities/Coupon";
 
 test("should test coupon", () => {
   const coupon = new Coupon("VALE20", 20, new Date("2023-04-15T10:00:00"));
