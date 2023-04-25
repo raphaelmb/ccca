@@ -6,6 +6,8 @@ import ProductDataDatabase from "../../src/infra/data/ProductDataDatabase";
 import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
 import QueueController from "../../src/infra/queue/QueueControler";
 import QueueMemory from "../../src/infra/queue/QueueMemory";
+import ZipcodeDataDatabase from "../../src/infra/data/ZipcodeDataDatabase";
+import CalculateFreight from "../../src/application/CalculateFreight";
 
 test("should test queue", async () => {
   const queue = new QueueMemory();
@@ -13,7 +15,14 @@ test("should test queue", async () => {
   const productData = new ProductDataDatabase(connection);
   const couponData = new CouponDataDatabase(connection);
   const orderData = new OrderDataDatabase(connection);
-  const checkout = new Checkout(productData, couponData, orderData);
+  const zipcodeData = new ZipcodeDataDatabase(connection);
+  const calculateFreight = new CalculateFreight(productData, zipcodeData);
+  const checkout = new Checkout(
+    productData,
+    couponData,
+    orderData,
+    calculateFreight
+  );
   const checkoutSpy = vi.spyOn(checkout, "execute");
   new QueueController(queue, checkout);
   const input = {
@@ -27,6 +36,6 @@ test("should test queue", async () => {
   await queue.publish("checkout", input);
   const returnValue = checkoutSpy.mock.results[0].value;
   expect(returnValue.code).toBe("202300000001");
-  expect(returnValue.total).toBe(6350);
+  expect(returnValue.total).toBe(6370);
   checkoutSpy.mockRestore();
 });

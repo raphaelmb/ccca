@@ -35,7 +35,6 @@ export default class Order {
         currencyValue
       )
     );
-    this.freight += FreightCalculator.calculate(product);
   }
 
   addCoupon(coupon: Coupon) {

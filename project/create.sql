@@ -1,3 +1,4 @@
+drop table ccat9.zipcode;
 drop table ccat9.item;
 drop table ccat9.order;
 drop table ccat9.product;
@@ -52,3 +53,15 @@ create table ccat9.item (
   quantity integer,
   primary key (id_order, id_product)
 );
+
+create table ccat9.zipcode (
+  code text primary key,
+  street text,
+  neighborhood text,
+  lat numeric,
+  long numeric
+);
+
+insert into ccat9.zipcode (code, street, neighborhood, lat, long) 
+values ('22030060', '', '', -27.5945, -48.5477), 
+       ('88015600', '', '', -22.9129, -43.2003);

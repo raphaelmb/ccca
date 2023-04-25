@@ -24,7 +24,7 @@ test("should place an order with 3 items", async () => {
   };
   const response = await axios.post("http://localhost:3000/checkout", input);
   const output = response.data;
-  expect(output.total).toBe(6350);
+  expect(output.total).toBe(6370);
 });
 
 test("should not place an order with non existing item", async () => {
@@ -50,7 +50,7 @@ test("should place an order with 3 items with discount coupon", async () => {
   };
   const response = await axios.post("http://localhost:3000/checkout", input);
   const output = response.data;
-  expect(output.total).toBe(5132);
+  expect(output.total).toBe(5152);
 });
 
 test("should place an order with 3 items with an expired discount coupon", async () => {
@@ -65,7 +65,7 @@ test("should place an order with 3 items with an expired discount coupon", async
   };
   const response = await axios.post("http://localhost:3000/checkout", input);
   const output = response.data;
-  expect(output.total).toBe(6350);
+  expect(output.total).toBe(6370);
 });
 
 test("should place an order with negative quantity", async () => {

@@ -6,13 +6,22 @@ import OrderDataDatabase from "../../src/infra/data/OrderDataDatabase";
 import Checkout from "../../src/application/Checkout";
 import CLIController from "../../src/infra/cli/CLIController";
 import CLIHandlerMemory from "../../src/infra/cli/CLIHandlerMemory";
+import ZipcodeDataDatabase from "../../src/infra/data/ZipcodeDataDatabase";
+import CalculateFreight from "../../src/application/CalculateFreight";
 
 test("should test cli", async () => {
   const connection = new PgPromiseConnection();
   const productData = new ProductDataDatabase(connection);
   const couponData = new CouponDataDatabase(connection);
   const orderData = new OrderDataDatabase(connection);
-  const checkout = new Checkout(productData, couponData, orderData);
+  const zipcodeData = new ZipcodeDataDatabase(connection);
+  const calculateFreight = new CalculateFreight(productData, zipcodeData);
+  const checkout = new Checkout(
+    productData,
+    couponData,
+    orderData,
+    calculateFreight
+  );
   const handler = new CLIHandlerMemory();
   const checkoutSpy = vi.spyOn(checkout, "execute");
   new CLIController(handler, checkout);

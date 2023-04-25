@@ -27,4 +27,8 @@ export default class OrderDataDatabase implements OrderData {
     );
     return options.count;
   }
+
+  clean(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 }

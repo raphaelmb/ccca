@@ -19,7 +19,8 @@ test("should create order with 3 items", () => {
   order.addItem(new Product(1, "A", 1000, 100, 30, 10, 3), 1);
   order.addItem(new Product(2, "B", 5000, 50, 50, 50, 22), 1);
   order.addItem(new Product(3, "C", 30, 10, 10, 10, 1), 3);
-  expect(order.getTotal()).toBe(6350);
+  order.freight = 280;
+  expect(order.getTotal()).toBe(6370);
 });
 
 test("should create order with 3 items and a discount coupon", () => {
@@ -27,8 +28,9 @@ test("should create order with 3 items and a discount coupon", () => {
   order.addItem(new Product(1, "A", 1000, 100, 30, 10, 3), 1);
   order.addItem(new Product(2, "B", 5000, 50, 50, 50, 22), 1);
   order.addItem(new Product(3, "C", 30, 10, 10, 10, 1), 3);
-  order.addCoupon(new Coupon("VALE20", 20, new Date("2023-04-15T10:00:00")));
-  expect(order.getTotal()).toBe(5132);
+  order.addCoupon(new Coupon("VALE20", 20, new Date("2023-05-15T10:00:00")));
+  order.freight = 280;
+  expect(order.getTotal()).toBe(5152);
 });
 
 test("should not create order with negative quantity", () => {
@@ -44,14 +46,6 @@ test("should not create order with duplicate item", () => {
   expect(() => {
     order.addItem(new Product(1, "A", 1000, 100, 30, 10, 3), 1);
   }).toThrowError("Duplicated product");
-});
-
-test("should create order with 3 items plus freight", () => {
-  const order = new Order("987-654-321-00");
-  order.addItem(new Product(1, "A", 1000, 100, 30, 10, 3), 1);
-  order.addItem(new Product(2, "B", 5000, 50, 50, 50, 22), 1);
-  order.addItem(new Product(3, "C", 30, 10, 10, 10, 1), 3);
-  expect(order.getTotal()).toBe(6350);
 });
 
 test("should create order with 3 items with code", () => {
