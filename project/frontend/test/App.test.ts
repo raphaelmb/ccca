@@ -1,6 +1,10 @@
 import { mount } from "@vue/test-utils";
-//@ts-ignore
 import AppVue from "../src/App.vue";
+import CheckoutGatewayHttp from "../src/infra/gateway/CheckoutGatewayHttp";
+import CheckoutGateway from "../src/infra/gateway/CheckoutGateway";
+import Product from "../src/domain/Product";
+import AxiosAdapter from "../src/infra/http/AxiosAdapter";
+import { HttpProxy } from "vite";
 
 function sleep(time: number) {
   return new Promise((resolve) => {
@@ -11,7 +15,16 @@ function sleep(time: number) {
 }
 
 test("should have an empty order", async () => {
-  const wrapper = mount(AppVue, {});
+  const httpClient = new AxiosAdapter();
+  const baseUrl = "http://localhost:3000";
+  const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
+  const wrapper = mount(AppVue, {
+    global: {
+      provide: {
+        checkoutGateway,
+      },
+    },
+  });
   expect(wrapper.get(".title").text()).toBe("Checkout");
   expect(wrapper.findAll(".product-description").at(0)?.text()).toBe("A");
   expect(wrapper.findAll(".product-price").at(0)?.text()).toBe("$1,000.00");
@@ -23,7 +36,16 @@ test("should have an empty order", async () => {
 });
 
 test("should have an order with one item", async () => {
-  const wrapper = mount(AppVue, {});
+  const httpClient = new AxiosAdapter();
+  const baseUrl = "http://localhost:3000";
+  const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
+  const wrapper = mount(AppVue, {
+    global: {
+      provide: {
+        checkoutGateway,
+      },
+    },
+  });
   await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
   expect(wrapper.get(".total").text()).toBe("$1,000.00");
   expect(wrapper.findAll(".item-description").at(0)?.text()).toBe("A");
@@ -31,7 +53,16 @@ test("should have an order with one item", async () => {
 });
 
 test("should have an order with many items and quantity greater than one", async () => {
-  const wrapper = mount(AppVue, {});
+  const httpClient = new AxiosAdapter();
+  const baseUrl = "http://localhost:3000";
+  const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
+  const wrapper = mount(AppVue, {
+    global: {
+      provide: {
+        checkoutGateway,
+      },
+    },
+  });
   await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
   await wrapper.findAll(".product-add-button").at(1)?.trigger("click");
   await wrapper.findAll(".product-add-button").at(2)?.trigger("click");
@@ -47,7 +78,16 @@ test("should have an order with many items and quantity greater than one", async
 });
 
 test("should have an order with many items and decrease the quantity of items in the order", async () => {
-  const wrapper = mount(AppVue, {});
+  const httpClient = new AxiosAdapter();
+  const baseUrl = "http://localhost:3000";
+  const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
+  const wrapper = mount(AppVue, {
+    global: {
+      provide: {
+        checkoutGateway,
+      },
+    },
+  });
   await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
   await wrapper.findAll(".product-add-button").at(1)?.trigger("click");
   await wrapper.findAll(".product-add-button").at(2)?.trigger("click");
@@ -60,7 +100,16 @@ test("should have an order with many items and decrease the quantity of items in
 });
 
 test("should have an order with many items and increase the quantity of items in the order", async () => {
-  const wrapper = mount(AppVue, {});
+  const httpClient = new AxiosAdapter();
+  const baseUrl = "http://localhost:3000";
+  const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
+  const wrapper = mount(AppVue, {
+    global: {
+      provide: {
+        checkoutGateway,
+      },
+    },
+  });
   await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
   expect(wrapper.get(".total").text()).toBe("$1,000.00");
   expect(wrapper.findAll(".item-quantity").at(0)?.text()).toBe("1");
@@ -71,7 +120,16 @@ test("should have an order with many items and increase the quantity of items in
 });
 
 test("should have an order with many items and decrease the quantity of items in the order and do not allow quantity less than 0", async () => {
-  const wrapper = mount(AppVue, {});
+  const httpClient = new AxiosAdapter();
+  const baseUrl = "http://localhost:3000";
+  const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
+  const wrapper = mount(AppVue, {
+    global: {
+      provide: {
+        checkoutGateway,
+      },
+    },
+  });
   await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
   await wrapper.findAll(".item-decrease-button").at(0)?.trigger("click");
   await wrapper.findAll(".item-decrease-button").at(0)?.trigger("click");
@@ -80,7 +138,24 @@ test("should have an order with many items and decrease the quantity of items in
 });
 
 test("should confirm an order with one item", async () => {
-  const wrapper = mount(AppVue, {});
+  const checkoutGateway: CheckoutGateway = {
+    async getProducts(): Promise<Product[]> {
+      return [{ idProduct: 4, description: "D", price: 1000 }];
+    },
+    async checkout(input: any): Promise<any> {
+      return {
+        code: "202300000001",
+        total: 1030,
+      };
+    },
+  };
+  const wrapper = mount(AppVue, {
+    global: {
+      provide: {
+        checkoutGateway,
+      },
+    },
+  });
   await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
   await wrapper.get(".confirm").trigger("click");
   await sleep(100);
@@ -90,7 +165,24 @@ test("should confirm an order with one item", async () => {
 });
 
 test("should have 4 products", async () => {
-  const wrapper = mount(AppVue, {});
+  const checkoutGateway: CheckoutGateway = {
+    async getProducts(): Promise<Product[]> {
+      return [{ idProduct: 4, description: "D", price: 1000 }];
+    },
+    async checkout(input: any): Promise<any> {
+      return {
+        code: "202300000001",
+        total: 1030,
+      };
+    },
+  };
+  const wrapper = mount(AppVue, {
+    global: {
+      provide: {
+        checkoutGateway,
+      },
+    },
+  });
   await sleep(100);
   expect(wrapper.get(".title").text()).toBe("Checkout");
   expect(wrapper.findAll(".product-description").at(0)?.text()).toBe("A");
