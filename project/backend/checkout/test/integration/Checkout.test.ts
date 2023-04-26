@@ -1,17 +1,10 @@
 import { test, expect, vi, beforeEach } from "vitest";
 import Checkout from "../../src/application/Checkout";
-import CurrencyGatewayRandom from "../../src/infra/gateway/CurrencyGatewayRandom";
-import MailerConsole from "../../src/infra/mailer/MailerConsole";
-import CurrencyGateway from "../../src/infra/gateway/CurrencyGateway";
-import Currencies from "../../src/domain/entities/Currencies";
 import ProductData from "../../src/domain/data/ProductData";
 import OrderData from "../../src/domain/data/OrderData";
 import Product from "../../src/domain/entities/Product";
 import CouponData from "../../src/domain/data/CouponData";
-import ZipcodeDataDatabase from "../../src/infra/data/ZipcodeDataDatabase";
-import ZipcodeData from "../../src/domain/data/ZipcodeData";
-import Zipcode from "../../src/domain/entities/Zipcode";
-import CalculateFreight from "../../src/application/CalculateFreight";
+import FreightGatewayHttp from "../../src/infra/gateway/FreightGatewayHttp";
 
 let checkout: Checkout;
 
@@ -54,18 +47,8 @@ beforeEach(() => {
     async clean(): Promise<void> {},
   };
 
-  const zipcodeData: ZipcodeData = {
-    async get(code: string): Promise<Zipcode | undefined> {
-      if (code === "22030060") {
-        return new Zipcode("22030060", "", "", -27.5945, -48.5477);
-      }
-      if (code === "88015600") {
-        return new Zipcode("88015600", "", "", -22.9129, -43.2003);
-      }
-    },
-  };
-  const calculateFreight = new CalculateFreight(productData, zipcodeData);
-  checkout = new Checkout(productData, couponData, orderData, calculateFreight);
+  const freightGateway = new FreightGatewayHttp();
+  checkout = new Checkout(productData, couponData, orderData, freightGateway);
 });
 
 test("should place an order with 3 items", async () => {

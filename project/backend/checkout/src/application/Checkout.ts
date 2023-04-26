@@ -6,15 +6,14 @@ import MailerConsole from "../infra/mailer/MailerConsole";
 import Order from "../domain/entities/Order";
 import ProductData from "../domain/data/ProductData";
 import OrderData from "../domain/data/OrderData";
-import ZipcodeData from "../domain/data/ZipcodeData";
-import CalculateFreight from "./CalculateFreight";
+import FreightGateway from "../infra/gateway/FreightGateway";
 
 export default class Checkout {
   constructor(
     readonly productData: ProductData,
     readonly couponData: CouponData,
     readonly orderData: OrderData,
-    readonly calculateFreight: CalculateFreight,
+    readonly freightGateway: FreightGateway,
     readonly currencyGateway: CurrencyGateway = new CurrencyGatewayRandom(),
     readonly mailer: Mailer = new MailerConsole()
   ) {}
@@ -22,6 +21,11 @@ export default class Checkout {
   async execute(input: Input) {
     const currencies = await this.currencyGateway.getCurrencies();
     const order = new Order(input.cpf);
+    const freightItems: {
+      volume: number;
+      density: number;
+      quantity: number;
+    }[] = [];
     for (const item of input.items) {
       const product = await this.productData.getProduct(item.idProduct);
       order.addItem(
@@ -30,12 +34,17 @@ export default class Checkout {
         product.currency,
         currencies.getCurrency(product.currency)
       );
+      freightItems.push({
+        volume: product.getVolume(),
+        density: product.getDensity(),
+        quantity: item.quantity,
+      });
     }
-    const freight = await this.calculateFreight.execute({
-      from: input.from,
-      to: input.to,
-      items: input.items,
-    });
+    const freight = await this.freightGateway.calculateFreight(
+      freightItems,
+      input.from,
+      input.to
+    );
     order.freight = freight.total;
     if (input.coupon) {
       const coupon = await this.couponData.getCoupon(input.coupon);

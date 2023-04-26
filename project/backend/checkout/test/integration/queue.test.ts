@@ -6,8 +6,7 @@ import ProductDataDatabase from "../../src/infra/data/ProductDataDatabase";
 import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
 import QueueController from "../../src/infra/queue/QueueControler";
 import QueueMemory from "../../src/infra/queue/QueueMemory";
-import ZipcodeDataDatabase from "../../src/infra/data/ZipcodeDataDatabase";
-import CalculateFreight from "../../src/application/CalculateFreight";
+import FreightGatewayHttp from "../../src/infra/gateway/FreightGatewayHttp";
 
 test("should test queue", async () => {
   const queue = new QueueMemory();
@@ -15,13 +14,12 @@ test("should test queue", async () => {
   const productData = new ProductDataDatabase(connection);
   const couponData = new CouponDataDatabase(connection);
   const orderData = new OrderDataDatabase(connection);
-  const zipcodeData = new ZipcodeDataDatabase(connection);
-  const calculateFreight = new CalculateFreight(productData, zipcodeData);
+  const freightGateway = new FreightGatewayHttp();
   const checkout = new Checkout(
     productData,
     couponData,
     orderData,
-    calculateFreight
+    freightGateway
   );
   const checkoutSpy = vi.spyOn(checkout, "execute");
   new QueueController(queue, checkout);
