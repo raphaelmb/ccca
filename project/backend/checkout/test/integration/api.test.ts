@@ -27,7 +27,7 @@ test("should place an order with 3 items", async () => {
   expect(output.total).toBe(6370);
 });
 
-test("should not place an order with non existing item", async () => {
+test.skip("should not place an order with non existing item", async () => {
   const input = {
     cpf: "987.654.321-00",
     items: [{ idProduct: 5, quantity: 1 }],

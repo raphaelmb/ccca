@@ -23,12 +23,12 @@ export default class ProductDataDatabase implements ProductData {
   }
 
   async getProducts(): Promise<Product[]> {
-    const [producstData] = await this.connection.query(
+    const productsData = await this.connection.query(
       "select * from ccat9.product",
       []
     );
     const products = [];
-    for (const productData of producstData) {
+    for (const productData of productsData) {
       const product = new Product(
         productData.id_product,
         productData.description,

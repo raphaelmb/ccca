@@ -7,6 +7,7 @@ import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
 import QueueController from "../../src/infra/queue/QueueControler";
 import QueueMemory from "../../src/infra/queue/QueueMemory";
 import FreightGatewayHttp from "../../src/infra/gateway/FreightGatewayHttp";
+import CatalogGatewayHttp from "../../src/infra/gateway/CatalogGatewayHttp";
 
 test("should test queue", async () => {
   const queue = new QueueMemory();
@@ -15,8 +16,9 @@ test("should test queue", async () => {
   const couponData = new CouponDataDatabase(connection);
   const orderData = new OrderDataDatabase(connection);
   const freightGateway = new FreightGatewayHttp();
+  const catalogGateway = new CatalogGatewayHttp();
   const checkout = new Checkout(
-    productData,
+    catalogGateway,
     couponData,
     orderData,
     freightGateway

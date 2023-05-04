@@ -10,7 +10,6 @@ export default class RestController {
       "post",
       "/calculateFreight",
       async (params: any, body: any) => {
-        console.log("GET /products");
         const output = await calculateFreight.execute(body);
         return output;
       }

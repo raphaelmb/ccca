@@ -5,6 +5,9 @@ import OrderData from "../../src/domain/data/OrderData";
 import Product from "../../src/domain/entities/Product";
 import CouponData from "../../src/domain/data/CouponData";
 import FreightGatewayHttp from "../../src/infra/gateway/FreightGatewayHttp";
+import CatalogGatewayHttp from "../../src/infra/gateway/CatalogGatewayHttp";
+import Currencies from "../../src/domain/entities/Currencies";
+import CurrencyGatewayRandom from "../../src/infra/gateway/CurrencyGatewayRandom";
 
 let checkout: Checkout;
 
@@ -48,7 +51,13 @@ beforeEach(() => {
   };
 
   const freightGateway = new FreightGatewayHttp();
-  checkout = new Checkout(productData, couponData, orderData, freightGateway);
+  const catalogGateway = new CatalogGatewayHttp();
+  checkout = new Checkout(
+    catalogGateway,
+    couponData,
+    orderData,
+    freightGateway
+  );
 });
 
 test("should place an order with 3 items", async () => {
@@ -64,27 +73,27 @@ test("should place an order with 3 items", async () => {
   expect(output.total).toBe(6370);
 });
 
-// test("should place an order with 4 items with different currencies", async () => {
-//   const currencies = new Currencies();
-//   currencies.addCurrency("USD", 2);
-//   currencies.addCurrency("BRL", 1);
-//   const currencyGatewayStub = vi
-//     .spyOn(CurrencyGatewayRandom.prototype, "getCurrencies")
-//     .mockResolvedValue(currencies);
-//   const input = {
-//     cpf: "987.654.321-00",
-//     email: "test@email.com",
-//     items: [
-//       { idProduct: 1, quantity: 1 },
-//       { idProduct: 2, quantity: 1 },
-//       { idProduct: 3, quantity: 3 },
-//       { idProduct: 4, quantity: 1 },
-//     ],
-//   };
-//   const output = await checkout.execute(input);
-//   expect(output.total).toBe(6600);
-//   currencyGatewayStub.mockRestore();
-// });
+test("should place an order with 4 items with different currencies", async () => {
+  const currencies = new Currencies();
+  currencies.addCurrency("USD", 2);
+  currencies.addCurrency("BRL", 1);
+  const currencyGatewayStub = vi
+    .spyOn(CurrencyGatewayRandom.prototype, "getCurrencies")
+    .mockResolvedValue(currencies);
+  const input = {
+    cpf: "987.654.321-00",
+    email: "test@email.com",
+    items: [
+      { idProduct: 1, quantity: 1 },
+      { idProduct: 2, quantity: 1 },
+      { idProduct: 3, quantity: 3 },
+      { idProduct: 4, quantity: 1 },
+    ],
+  };
+  const output = await checkout.execute(input);
+  expect(output.total).toBe(6600);
+  currencyGatewayStub.mockRestore();
+});
 
 test("should place an order with 3 items with order code", async () => {
   const input = {

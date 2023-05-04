@@ -5,8 +5,8 @@ import OrderDataDatabase from "./infra/data/OrderDataDatabase";
 import ProductDataDatabase from "./infra/data/ProductDataDatabase";
 import QueueController from "./infra/queue/QueueControler";
 import RabbitMQAdapter from "./infra/queue/RabbitMQAdapter";
-import ZipcodeDataDatabase from "./infra/data/ZipcodeDataDatabase";
 import FreightGatewayHttp from "./infra/gateway/FreightGatewayHttp";
+import CatalogGatewayHttp from "./infra/gateway/CatalogGatewayHttp";
 
 async function init() {
   const queue = new RabbitMQAdapter();
@@ -16,8 +16,9 @@ async function init() {
   const couponData = new CouponDataDatabase(connection);
   const orderData = new OrderDataDatabase(connection);
   const freightGateway = new FreightGatewayHttp();
+  const catalogGateway = new CatalogGatewayHttp();
   const checkout = new Checkout(
-    productData,
+    catalogGateway,
     couponData,
     orderData,
     freightGateway

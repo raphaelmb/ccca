@@ -7,6 +7,7 @@ import Checkout from "../../src/application/Checkout";
 import CLIController from "../../src/infra/cli/CLIController";
 import CLIHandlerMemory from "../../src/infra/cli/CLIHandlerMemory";
 import FreightGatewayHttp from "../../src/infra/gateway/FreightGatewayHttp";
+import CatalogGatewayHttp from "../../src/infra/gateway/CatalogGatewayHttp";
 
 test("should test cli", async () => {
   const connection = new PgPromiseConnection();
@@ -14,8 +15,9 @@ test("should test cli", async () => {
   const couponData = new CouponDataDatabase(connection);
   const orderData = new OrderDataDatabase(connection);
   const freightGateway = new FreightGatewayHttp();
+  const catalogGateway = new CatalogGatewayHttp();
   const checkout = new Checkout(
-    productData,
+    catalogGateway,
     couponData,
     orderData,
     freightGateway

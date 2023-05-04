@@ -1,6 +1,5 @@
 import GetProduct from "../../application/GetProduct";
 import GetProducts from "../../application/GetProducts";
-import ProductData from "../../domain/data/ProductData";
 import HttpServer from "../http/HttpServer";
 
 export default class RestController {
@@ -10,7 +9,6 @@ export default class RestController {
     readonly getProducts: GetProducts
   ) {
     httpServer.on("get", "/products", async (params: any, body: any) => {
-      console.log("GET /products");
       const output = await getProducts.execute();
       return output;
     });
@@ -19,7 +17,6 @@ export default class RestController {
       "get",
       "/products/:idProduct",
       async (params: any, body: any) => {
-        console.log("GET /products");
         const output = await getProduct.execute(params.idProduct);
         return output;
       }
