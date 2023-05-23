@@ -8,6 +8,7 @@ import FreightGatewayHttp from "../../src/infra/gateway/FreightGatewayHttp";
 import CatalogGatewayHttp from "../../src/infra/gateway/CatalogGatewayHttp";
 import Currencies from "../../src/domain/entities/Currencies";
 import CurrencyGatewayRandom from "../../src/infra/gateway/CurrencyGatewayRandom";
+import StockGatewayHttp from "../../src/infra/gateway/StockGatewayHttp";
 
 let checkout: Checkout;
 
@@ -52,11 +53,13 @@ beforeEach(() => {
 
   const freightGateway = new FreightGatewayHttp();
   const catalogGateway = new CatalogGatewayHttp();
+  const stockGateway = new StockGatewayHttp();
   checkout = new Checkout(
     catalogGateway,
     couponData,
     orderData,
-    freightGateway
+    freightGateway,
+    stockGateway
   );
 });
 

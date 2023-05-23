@@ -8,6 +8,7 @@ import CLIController from "../../src/infra/cli/CLIController";
 import CLIHandlerMemory from "../../src/infra/cli/CLIHandlerMemory";
 import FreightGatewayHttp from "../../src/infra/gateway/FreightGatewayHttp";
 import CatalogGatewayHttp from "../../src/infra/gateway/CatalogGatewayHttp";
+import StockGatewayHttp from "../../src/infra/gateway/StockGatewayHttp";
 
 test("should test cli", async () => {
   const connection = new PgPromiseConnection();
@@ -16,11 +17,13 @@ test("should test cli", async () => {
   const orderData = new OrderDataDatabase(connection);
   const freightGateway = new FreightGatewayHttp();
   const catalogGateway = new CatalogGatewayHttp();
+  const stockGateway = new StockGatewayHttp();
   const checkout = new Checkout(
     catalogGateway,
     couponData,
     orderData,
-    freightGateway
+    freightGateway,
+    stockGateway
   );
   const handler = new CLIHandlerMemory();
   const checkoutSpy = vi.spyOn(checkout, "execute");
