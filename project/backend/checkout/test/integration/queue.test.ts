@@ -3,7 +3,7 @@ import Checkout from "../../src/application/Checkout";
 import CouponDataDatabase from "../../src/infra/data/CouponDataDatabase";
 import OrderDataDatabase from "../../src/infra/data/OrderDataDatabase";
 import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
-import QueueController from "../../src/infra/queue/QueueControler";
+import QueueController from "../../src/infra/queue/QueueController";
 import QueueMemory from "../../src/infra/queue/QueueMemory";
 import FreightGatewayHttp from "../../src/infra/gateway/FreightGatewayHttp";
 import CatalogGatewayHttp from "../../src/infra/gateway/CatalogGatewayHttp";

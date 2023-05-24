@@ -2,7 +2,7 @@ import CouponDataDatabase from "./infra/data/CouponDataDatabase";
 import Checkout from "./application/Checkout";
 import PgPromiseConnection from "./infra/database/PgPromiseConnection";
 import OrderDataDatabase from "./infra/data/OrderDataDatabase";
-import QueueController from "./infra/queue/QueueControler";
+import QueueController from "./infra/queue/QueueController";
 import RabbitMQAdapter from "./infra/queue/RabbitMQAdapter";
 import FreightGatewayHttp from "./infra/gateway/FreightGatewayHttp";
 import CatalogGatewayHttp from "./infra/gateway/CatalogGatewayHttp";
